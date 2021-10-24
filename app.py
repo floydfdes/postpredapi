@@ -9,9 +9,11 @@ import pickle
 import numpy as np
 import json
 import datetime
+
 app = Flask(__name__)
 CORS(app)
 model = pickle.load(open('RandomForestGridModel.pkl', 'rb'))
+
 modelImage = load_model('appleandbananas.h5')
 
 
@@ -44,17 +46,21 @@ def image_api():
     file_name = x.strftime("%f")
     image_path = "./images/" + 'test' + file_name + '.jpeg'
     image_file.save(image_path)
-    img1 = image.load_img(image_path, target_size=(224, 224))
-    y = image.img_to_array(img1)
-    x_array = np.expand_dims(y, axis=0)
-    val = modelImage.predict(x_array)
-    if val == 1:
-        result= 'banana'
-    elif val == 0:
-        result= 'apple'
+    result = predictImage(image_path)
     if result:
         os.remove(image_path)
     return result
+
+
+def predictImage(filename):
+    img1 = image.load_img(filename, target_size=(224, 224))
+    Y = image.img_to_array(img1)
+    X = np.expand_dims(Y, axis=0)
+    val = modelImage.predict(X)
+    if val == 1:
+        return 'banana'
+    elif val == 0:
+        return 'apple'
 
 
 if __name__ == '__main__':
