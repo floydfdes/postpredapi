@@ -57,10 +57,6 @@ def image_api():
     return result
 
 
-def predictImage(filename):
-
-
-
 if __name__ == '__main__':
     print("hello main")
     app.run()
