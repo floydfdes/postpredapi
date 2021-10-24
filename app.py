@@ -9,10 +9,17 @@ import pickle
 import numpy as np
 import json
 import datetime
-
+import zipfile
 app = Flask(__name__)
 CORS(app)
 model = pickle.load(open('RandomForestGridModel.pkl', 'rb'))
+zip_file='appleandbananas.zip'
+try:
+    with zipfile.ZipFile(zip_file) as z:
+        z.extractall()
+        print("Extracted all")
+except:
+    print("Invalid file")
 
 modelImage = load_model('appleandbananas.h5')
 
